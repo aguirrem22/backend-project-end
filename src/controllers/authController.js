@@ -61,8 +61,8 @@ const authController = {
         }
       } else {
         // Si no existe en la base de datos, verifica las credenciales del .env
-        const adminUser = process.env.USER;
-        const adminPass = process.env.PASSWORD;
+        const adminUser = process.env.ADMINUSER || process.env.USER;
+        const adminPass = process.env.ADMINPASS || process.env.PASSWORD;
 
         if (username !== adminUser || password !== adminPass) {
           return res.status(401).send(`

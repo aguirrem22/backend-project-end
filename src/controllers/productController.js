@@ -3,14 +3,19 @@ const baseHtml = require("../helpers/baseHtml.js");
 const getNavBar = require("../helpers/getNavBar.js");
 const { renderProductCards, renderProductForm, renderProductDetail, renderAdminForm } = require("../helpers/template.js");
 
+const isApiRequest = (req) => req.baseUrl === "/api";
+
 const productController = {
     createProduct: async (req, res) => {
         try {
             const product = await Product.create(req.body);
-            res.redirect("/dashboard");
+            if (isApiRequest(req)) {
+                return res.status(201).json(product);
+            }
+            return res.redirect("/dashboard");
         } catch (error) {
             console.log(error);
-            res.status(501).send({message: "There was a problem trying to create the product"});
+            return res.status(501).send({message: "There was a problem trying to create the product"});
         }
     },
     showNewProduct: async (req, res) => {
@@ -90,14 +95,23 @@ const productController = {
         console.log("Method:", req.method);
         console.log("Body:", req.body);
         try {
-            const task = await Product.findByIdAndUpdate(id, req.body);
-            if (!task) {
+            const updatedProduct = await Product.findByIdAndUpdate(id, req.body, {
+                new: true,
+                runValidators: true,
+            });
+
+            if (!updatedProduct) {
                 return res.status(404).send({message: "There is no product with that id"});
             }
-            res.redirect("/products");
+
+            if (isApiRequest(req)) {
+                return res.status(200).json(updatedProduct);
+            }
+
+            return res.redirect("/products");
         } catch (error) {
             console.log(error);
-            res.status(501).send({message: "There was a problem trying to update the product"});
+            return res.status(501).send({message: "There was a problem trying to update the product"});
         }
     },
     showEditProduct: async (req, res) => {

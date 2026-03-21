@@ -9,7 +9,8 @@
   "scripts": {
     "test": "jest",
     "dev": "node --watch src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "seed": "node src/scripts/seedProducts.js"
   },
   "keywords": [],
   "author": "",
