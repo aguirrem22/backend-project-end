@@ -1,0 +1,32 @@
+{
+  "name": "project-break-2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest",
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cloudinary": "2.9.0",
+    "connect-mongo": "6.0.0",
+    "cors": "2.8.6",
+    "dotenv": "17.2.4",
+    "express": "5.2.1",
+    "express-session": "1.19.0",
+    "method-override": "3.0.0",
+    "mongoose": "9.1.6"
+  },
+  "devDependencies": {
+    "jest": "30.2.0",
+    "supertest": "7.2.2"
+  }
+}
