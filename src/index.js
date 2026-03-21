@@ -1,15 +1,12 @@
 const express = require("express");
 const session = require('express-session');
 const MongoStore = require('connect-mongo').default;
-const path = require('path');
 const cors = require("cors");
-const methodOverride = require("method-override");
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const connectDB = require("./config/db.js");
-const productRouter = require("./routes/productRoutes.js");
 const apiRouter = require("./routes/apiRoutes.js");
 
 app.use(cors({
@@ -18,8 +15,6 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(methodOverride('_method'));
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Logging middleware para depuración
 app.use((req, res, next) => {
@@ -46,6 +41,9 @@ app.use(session({
 
 connectDB();
 app.use("/api", apiRouter);
-app.use("/", productRouter);
+
+app.get("/", (req, res) => {
+    res.json({ message: "Backend API running" });
+});
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

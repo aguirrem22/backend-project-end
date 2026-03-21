@@ -3,6 +3,8 @@
 
 URL API: https://tienda-dp-contact.onrender.com
 
+Este proyecto backend ahora funciona en modo API-only (sin vistas SSR).
+
 ## Instalación
 Primero es importante tener [Node.js](https://nodejs.org/en) instalado en local, ya que el proyecto funciona con Node.js. Una vez instalado, abrir una terminal e ir al directorio donde está el proyecto.
 
@@ -25,9 +27,30 @@ Las técnologias usadas son las siguientes:
 - Dotenv
 
 ## Rutas y uso
-Las rutas de la api son las siguientes:
-- POST /api/create: Crea un producto
-- GET /api: Obtiene todos los productos
-- GET /api/id/:id: Obtiene un producto por su id
-- PUT /api/id/:id: Actualiza un producto por su id
-- DELETE /api/id/:id: Elimina un producto por su id
+Las rutas de la API son las siguientes:
+
+### Auth
+- POST /api/auth/login
+- POST /api/auth/logout
+- GET /api/auth/me
+
+### Productos (públicas)
+- GET /api
+- GET /api/id/:id
+
+### Productos (requieren sesión admin)
+- POST /api/create
+- PUT /api/id/:id
+- DELETE /api/id/:id
+
+## Variables de entorno
+Debes definir al menos:
+
+- MONGO_URI
+- ADMINUSER
+- ADMINPASS
+
+## Frontend
+El frontend React (carpeta frontend-project-end) consume esta API en:
+
+- http://localhost:3000/api

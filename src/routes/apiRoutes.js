@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const productController = require("../controllers/productController.js");
+const requireAuth = require("../middlewares/authMiddleware.js");
 const User = require("../models/User.js");
 
 router.post("/auth/login", async (req, res) => {
@@ -52,11 +53,11 @@ router.get("/auth/me", (req, res) => {
     });
 });
 
-router.post("/create", productController.createProduct);
+router.post("/create", requireAuth, productController.createProduct);
 router.get("/", productController.getProducts);
 router.get("/id/:id", productController.getProductById);
-router.put("/id/:id", productController.updateProduct);
-router.delete("/id/:id", productController.deleteProduct);
+router.put("/id/:id", requireAuth, productController.updateProduct);
+router.delete("/id/:id", requireAuth, productController.deleteProduct);
 
 router.use((req, res) => {
     res.status(404).json({error: "Página no encontrada"});
