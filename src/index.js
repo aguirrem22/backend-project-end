@@ -21,12 +21,13 @@ const allowedOrigins = [
     'http://127.0.0.1:5173',
     ...configuredOrigins,
 ];
+const netlifyOriginPattern = /^https:\/\/[a-z0-9-]+\.netlify\.app$/i;
 
 app.set('trust proxy', 1);
 
 app.use(cors({
     origin(origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (!origin || allowedOrigins.includes(origin) || netlifyOriginPattern.test(origin)) {
             return callback(null, true);
         }
 
