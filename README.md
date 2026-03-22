@@ -49,8 +49,25 @@ Debes definir al menos:
 - MONGO_URI
 - ADMINUSER
 - ADMINPASS
+- SESSION_SECRET
+- FRONTEND_URL o FRONTEND_URLS
 
 ## Frontend
 El frontend React (carpeta frontend-project-end) consume esta API en:
 
 - http://localhost:3000/api
+
+## Despliegue con Netlify
+Si el frontend está en Netlify y el backend en Render, añade el dominio del frontend al backend:
+
+```bash
+FRONTEND_URL=https://tu-sitio.netlify.app
+```
+
+O varios dominios/previews:
+
+```bash
+FRONTEND_URLS=https://tu-sitio.netlify.app,https://tu-preview.netlify.app
+```
+
+En producción la cookie de sesión se envía como `SameSite=None` y `Secure`, necesaria para el login admin entre dominios distintos.

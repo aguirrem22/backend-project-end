@@ -8,15 +8,30 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const connectDB = require("./config/db.js");
 const apiRouter = require("./routes/apiRoutes.js");
+const isProduction = process.env.NODE_ENV === 'production';
+
+const configuredOrigins = [process.env.FRONTEND_URL, process.env.FRONTEND_URLS]
+    .filter(Boolean)
+    .flatMap((value) => value.split(','))
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 
 const allowedOrigins = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
-    process.env.FRONTEND_URL,
-].filter(Boolean);
+    ...configuredOrigins,
+];
+
+app.set('trust proxy', 1);
 
 app.use(cors({
-    origin: allowedOrigins,
+    origin(origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        return callback(new Error('Origin not allowed by CORS'));
+    },
     credentials: true,
 }));
 app.use(express.json());
@@ -33,7 +48,7 @@ app.use((req, res, next) => {
 
 // Configuración de sesion con la base de datos de mongo
 app.use(session({
-    secret: 'secret-key',
+    secret: process.env.SESSION_SECRET || 'secret-key',
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({
@@ -41,8 +56,10 @@ app.use(session({
         touchAfter: 24 * 3600
     }),
     cookie: { 
-        secure: false,
-            }
+        httpOnly: true,
+        sameSite: isProduction ? 'none' : 'lax',
+        secure: isProduction,
+    }
 }));
 
 connectDB();
