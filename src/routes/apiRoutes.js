@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const productController = require("../controllers/productController.js");
+const orderController = require("../controllers/orderController.js");
 const requireAuth = require("../middlewares/authMiddleware.js");
 const User = require("../models/User.js");
 const { Product } = require("../models/Product.js");
@@ -106,6 +107,11 @@ router.post("/visits", async (req, res) => {
     res.status(500).json({ error: "Error al incrementar el contador de visitas" });
   }
 });
+
+
+router.post("/checkout", orderController.checkout);
+router.get("/orders", requireAuth, orderController.getAllOrders);
+router.get("/orders/:orderId", orderController.getOrder);
 
 router.use((req, res) => {
     res.status(404).json({error: "Página no encontrada"});
