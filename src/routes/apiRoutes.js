@@ -3,7 +3,7 @@ const router = express.Router();
 const productController = require("../controllers/productController.js");
 const requireAuth = require("../middlewares/authMiddleware.js");
 const User = require("../models/User.js");
-const Product = require("../models/Product.js");
+const { Product } = require("../models/Product.js");
 const visitService = require("../services/visitService.js");
 
 router.post("/auth/login", async (req, res) => {
