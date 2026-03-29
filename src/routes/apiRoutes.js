@@ -3,6 +3,7 @@ const router = express.Router();
 const productController = require("../controllers/productController.js");
 const requireAuth = require("../middlewares/authMiddleware.js");
 const User = require("../models/User.js");
+const Product = require("../models/Product.js");
 const visitService = require("../services/visitService.js");
 
 router.post("/auth/login", async (req, res) => {
@@ -59,6 +60,34 @@ router.get("/", productController.getProducts);
 router.get("/id/:id", productController.getProductById);
 router.put("/id/:id", requireAuth, productController.updateProduct);
 router.delete("/id/:id", requireAuth, productController.deleteProduct);
+
+router.post("/buy/:id", async (req, res) => {
+  try {
+    const { quantity } = req.body;
+    const productId = req.params.id;
+
+    if (!quantity || quantity <= 0) {
+      return res.status(400).json({ error: "Cantidad inválida" });
+    }
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+
+    if (product.stock < quantity) {
+      return res.status(400).json({ error: "Stock insuficiente" });
+    }
+
+    product.stock -= quantity;
+    await product.save();
+
+    res.json({ message: "Compra realizada", newStock: product.stock });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al procesar la compra" });
+  }
+});
 
 router.get("/visits", requireAuth, async (req, res) => {
   try {
