@@ -3,6 +3,7 @@ const router = express.Router();
 const productController = require("../controllers/productController.js");
 const requireAuth = require("../middlewares/authMiddleware.js");
 const User = require("../models/User.js");
+const visitService = require("../services/visitService.js");
 
 router.post("/auth/login", async (req, res) => {
     try {
@@ -58,6 +59,24 @@ router.get("/", productController.getProducts);
 router.get("/id/:id", productController.getProductById);
 router.put("/id/:id", requireAuth, productController.updateProduct);
 router.delete("/id/:id", requireAuth, productController.deleteProduct);
+
+router.get("/visits", requireAuth, async (req, res) => {
+  try {
+    const count = await visitService.getVisitCount();
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener el contador de visitas" });
+  }
+});
+
+router.post("/visits", async (req, res) => {
+  try {
+    const count = await visitService.incrementVisitCount();
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ error: "Error al incrementar el contador de visitas" });
+  }
+});
 
 router.use((req, res) => {
     res.status(404).json({error: "Página no encontrada"});

@@ -10,6 +10,7 @@ const sampleProducts = [
     categoria: 'Accesorios',
     talla: 'M',
     precio: 49.99,
+    stock: 15,
   },
   {
     nombre: 'Pantalón Kickboxing Flex',
@@ -18,6 +19,7 @@ const sampleProducts = [
     categoria: 'Pantalones',
     talla: 'L',
     precio: 39.95,
+    stock: 20,
   },
   {
     nombre: 'Camiseta Rashguard Core',
@@ -26,6 +28,7 @@ const sampleProducts = [
     categoria: 'Camisetas',
     talla: 'M',
     precio: 34.5,
+    stock: 25,
   },
   {
     nombre: 'Espinilleras Muay Thai Shield',
@@ -34,6 +37,7 @@ const sampleProducts = [
     categoria: 'Accesorios',
     talla: 'L',
     precio: 59,
+    stock: 10,
   },
   {
     nombre: 'Zapatillas Box Ring One',
@@ -42,6 +46,7 @@ const sampleProducts = [
     categoria: 'Zapatos',
     talla: '42',
     precio: 79.9,
+    stock: 8,
   },
   {
     nombre: 'Camiseta Training Noir',
@@ -50,6 +55,7 @@ const sampleProducts = [
     categoria: 'Camisetas',
     talla: 'S',
     precio: 24.99,
+    stock: 30,
   },
   {
     nombre: 'Pantalón Grappling Lite',
@@ -58,6 +64,7 @@ const sampleProducts = [
     categoria: 'Pantalones',
     talla: 'M',
     precio: 42,
+    stock: 12,
   },
   {
     nombre: 'Botas Combat Street',
@@ -66,6 +73,7 @@ const sampleProducts = [
     categoria: 'Zapatos',
     talla: '44',
     precio: 89.99,
+    stock: 5,
   },
 ];
 
@@ -79,9 +87,14 @@ async function runSeed() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('MongoDB conectado para seed');
 
-    await Product.deleteMany({});
-    const created = await Product.insertMany(sampleProducts);
+    // Verificar si ya hay productos
+    const existingCount = await Product.countDocuments();
+    if (existingCount > 0) {
+      console.log(`Ya hay ${existingCount} productos en la base de datos. Saltando seed para evitar perder datos.`);
+      process.exit(0);
+    }
 
+    const created = await Product.insertMany(sampleProducts);
     console.log(`Seed completado: ${created.length} productos insertados`);
     process.exit(0);
   } catch (error) {
