@@ -1,6 +1,5 @@
 # Backend Project Break
-## Marco Aguirre y Alesandro Quirós
-
+## Marco Aguirre 
 URL API: https://tienda-dp-contact.onrender.com
 
 Este proyecto backend ahora funciona en modo API-only (sin vistas SSR).
@@ -36,12 +35,20 @@ Las rutas de la API son las siguientes:
 
 ### Productos (públicas)
 - GET /api
+- GET /api/products
 - GET /api/id/:id
+- GET /api/products/:id
 
 ### Productos (requieren sesión admin)
 - POST /api/create
 - PUT /api/id/:id
 - DELETE /api/id/:id
+
+### Compras y órdenes
+- POST /api/buy/:id (descuenta stock)
+- POST /api/checkout (simula compra y registra orden)
+- GET /api/orders (admin)
+- GET /api/orders/:orderId
 
 ## Variables de entorno
 Debes definir al menos:
@@ -61,13 +68,6 @@ El frontend React (carpeta frontend-project-end) consume esta API en:
 Si el frontend está en Netlify y el backend en Render, añade el dominio del frontend al backend:
 
 ```bash
-FRONTEND_URL=https://tu-sitio.netlify.app
+FRONTEND_URL=https://shop-combat.netlify.app
 ```
 
-O varios dominios/previews:
-
-```bash
-FRONTEND_URLS=https://tu-sitio.netlify.app,https://tu-preview.netlify.app
-```
-
-En producción la cookie de sesión se envía como `SameSite=None` y `Secure`, necesaria para el login admin entre dominios distintos.

@@ -58,7 +58,9 @@ router.get("/auth/me", (req, res) => {
 
 router.post("/create", requireAuth, productController.createProduct);
 router.get("/", productController.getProducts);
+router.get("/products", productController.getProducts);
 router.get("/id/:id", productController.getProductById);
+router.get("/products/:id", productController.getProductById);
 router.put("/id/:id", requireAuth, productController.updateProduct);
 router.delete("/id/:id", requireAuth, productController.deleteProduct);
 
@@ -111,7 +113,7 @@ router.post("/visits", async (req, res) => {
 
 router.post("/checkout", orderController.checkout);
 router.get("/orders", requireAuth, orderController.getAllOrders);
-router.get("/orders/:orderId", orderController.getOrder);
+router.get("/orders/:orderId", requireAuth, orderController.getOrder);
 
 router.use((req, res) => {
     res.status(404).json({error: "Página no encontrada"});

@@ -19,7 +19,7 @@ const configuredOrigins = [process.env.FRONTEND_URL, process.env.FRONTEND_URLS]
 const allowedOrigins = [
     ...configuredOrigins,
 ];
-const localhostOriginPattern = /^https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?$/i;
+const localhostOriginPattern = /^https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?\/?$/i;
 const netlifyOriginPattern = /^https:\/\/([a-z0-9-]+)\.netlify\.app$/i;
 
 app.set('trust proxy', 1);

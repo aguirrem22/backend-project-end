@@ -7,16 +7,16 @@ const productController = {
             return res.status(201).json(product);
         } catch (error) {
             console.log(error);
-            return res.status(501).send({message: "There was a problem trying to create the product"});
+            return res.status(500).send({message: "There was a problem trying to create the product"});
         }
     },
     getProducts: async (req, res) => {
         try {
             const products = await Product.find();
-            res.status(201).json(products);
+            res.status(200).json(products);
         } catch (error) {
             console.log(error);
-            res.status(501).send({message: "There was a problem trying to get all products"});
+            res.status(500).send({message: "There was a problem trying to get all products"});
         }
     },
     getProductById: async (req, res) => {
@@ -26,10 +26,10 @@ const productController = {
             if (!product) {
                 return res.status(404).send({message: "There is no product with that id"});
             }
-            return res.status(201).send(product);
+            return res.status(200).send(product);
         } catch (error) {
             console.log(error);
-            return res.status(501).send({message: "There was a problem trying to get the product"});
+            return res.status(500).send({message: "There was a problem trying to get the product"});
         }
     },
     updateProduct: async (req, res) => {
@@ -47,7 +47,7 @@ const productController = {
             return res.status(200).json(updatedProduct);
         } catch (error) {
             console.log(error);
-            return res.status(501).send({message: "There was a problem trying to update the product"});
+            return res.status(500).send({message: "There was a problem trying to update the product"});
         }
     },
     deleteProduct: async (req, res) => {
@@ -61,7 +61,7 @@ const productController = {
             return res.status(200).send({message: "Product successfully deleted", deleteCount: deleteCount});
         } catch (error) {
             console.log(error);
-            return res.status(501).send({message: "There was a problem trying to delete the product"});
+            return res.status(500).send({message: "There was a problem trying to delete the product"});
         }
     },
 };
